@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Dynamic title will be set by JavaScript -->
+  <title>Loading...</title>
+  <!-- Meta tags will be set dynamically -->
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <!-- Open Graph tags -->
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
+  <meta property="og:url" content="">
+  <!-- Twitter Card tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
+  <!-- Canonical link -->
+  <link rel="canonical" href="">
+  <!-- Robots meta -->
+  <meta name="robots" content="index, follow">
+  <!-- Sitemap link -->
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎰</text></svg>">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2C3E50',
+            secondary: '#E74C3C',
+            accent: '#F39C12',
+            dark: '#1A1A1A',
+            light: '#F5F5F5'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Swiper.js -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js" defer></script>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Custom styles */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    .section-fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .section-fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .casino-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .casino-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .feature-block {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .feature-block:hover {
+      transform: translateY(-5px) rotate(1deg);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .modal {
+      transition: opacity 0.3s ease;
+    }
+    
+    .hamburger div {
+      transition: all 0.3s ease;
+    }
+    
+    .hamburger.active div:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .hamburger.active div:nth-child(2) {
+      opacity: 0;
+    }
+    
+    .hamburger.active div:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -6px);
+    }
+    
+    .mobile-menu {
+      transition: transform 0.3s ease;
+    }
+    
+    /* Spinner */
+    .spinner {
+      border: 3px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 3px solid #3498db;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 24px;
+      background-color: #2ecc71;
+      color: white;
+      border-radius: 4px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    /* Map styles */
+    .map-pin {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    
+    .map-pin:hover {
+      transform: scale(1.2);
+    }
+    
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body class="font-sans text-gray-800 bg-light">
+  <!-- Main container -->
+  <div id="app">
+    <!-- Header will be inserted here -->
+    
+    <!-- Main content sections will be inserted here -->
+    
+    <!-- Footer will be inserted here -->
+  </div>
+  
+  <!-- Modals -->
+  <div id="casino-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-2xl font-bold" id="modal-title"></h3>
+          <button class="close-modal text-gray-500 hover:text-gray-700">
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="absolute top-4 right-4 text-white text-2xl" id="close-lightbox">
+      <i class="fas fa-times"></i>
+    </button>
+    <img src="/placeholder.svg" alt="Enlarged casino image" id="lightbox-img">
+  </div>
+  
+  <!-- Toast notification -->
+  <div class="toast" id="toast">
+    <span id="toast-message"></span>
+  </div>
+  
+  <!-- Scripts -->
+  <script>
+    // Main application script
+    document.addEventListener('DOMContentLoaded', function() {
+      // ===== Site Name Generator =====
+      const adjectives = [
+        'Global', 'Elite', 'Premier', 'Prestige', 'Iconic', 'Majestic', 
+        'Exclusive', 'Ultimate', 'Exceptional', 'Distinguished', 'Renowned',
+        'Spectacular', 'Magnificent', 'Extraordinary', 'Celebrated'
+      ];
+      
+      const nouns = [
+        'Casino Guide', 'Hotel Casinos', 'Casino Destinations', 'Casino Retreats',
+        'Casino Collection', 'Casino Resorts', 'Casino Havens', 'Casino Escapes',
+        'Casino Showcase', 'Casino Directory', 'Casino Experiences', 'Casino Atlas'
+      ];
+      
+      // Generate random site name
+      const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+      const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
+      const siteName = `${randomAdjective} ${randomNoun}`;
+      
+      // Set dynamic meta tags
+      document.title = siteName;
+      document.querySelector('meta[name="description"]').content = `Discover the world's most exceptional hotel casinos at ${siteName}. Featuring top gaming destinations, entertainment venues, and world-class accommodations for casino enthusiasts.`;
+      document.querySelector('meta[name="keywords"]').content = 'hotel casino, casino resort, gaming destination, high stakes, blackjack, poker rooms, slot machines, roulette, baccarat, casino entertainment, VIP gaming, casino hotels, gaming floor, casino architecture';
+      
+      // Set Open Graph and Twitter tags
+      document.querySelector('meta[property="og:title"]').content = siteName;
+      document.querySelector('meta[property="og:description"]').content = `Discover the world's most exceptional hotel casinos at ${siteName}. Featuring top gaming destinations, entertainment venues, and world-class accommodations.`;
+      document.querySelector('meta[property="og:url"]').content = window.location.href;
+      document.querySelector('meta[name="twitter:title"]').content = siteName;
+      document.querySelector('meta[name="twitter:description"]').content = `Discover the world's most exceptional hotel casinos at ${siteName}. Featuring top gaming destinations, entertainment venues, and world-class accommodations.`;
+      
+      // Set canonical link
+      document.querySelector('link[rel="canonical"]').href = window.location.href;
+      
+      // ===== JSON-LD Schema =====
+      const casinoData = [
+        {
+          name: "Bellagio",
+          image: "https://images.unsplash.com/photo-1602002418816-5c0aeef426aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          address: {
+            streetAddress: "3600 S Las Vegas Blvd",
+            addressLocality: "Las Vegas",
+            addressRegion: "NV",
+            postalCode: "89109",
+            addressCountry: "US"
+          },
+          rating: 4.7,
+          ratingCount: 12453
+        },
+        {
+          name: "Marina Bay Sands",
+          image: "https://images.unsplash.com/photo-1565967511849-76a60a516170?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          address: {
+            streetAddress: "10 Bayfront Avenue",
+            addressLocality: "Singapore",
+            postalCode: "018956",
+            addressCountry: "SG"
+          },
+          rating: 4.8,
+          ratingCount: 15782
+        },
+        {
+          name: "Casino de Monte-Carlo",
+          image: "https://images.unsplash.com/photo-1602088113235-229c19758e9f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          address: {
+            streetAddress: "Place du Casino",
+            addressLocality: "Monte Carlo",
+            postalCode: "98000",
+            addressCountry: "MC"
+          },
+          rating: 4.6,
+          ratingCount: 8921
+        },
+        {
+          name: "The Venetian Macao",
+          image: "https://images.unsplash.com/photo-1518639192441-8fce0a366e2e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          address: {
+            streetAddress: "Estrada da Baía de N. Senhora da Esperança",
+            addressLocality: "Macau",
+            addressCountry: "MO"
+          },
+          rating: 4.7,
+          ratingCount: 14325
+        },
+        {
+          name: "Caesars Palace",
+          image: "https://images.unsplash.com/photo-1605833556294-ea5c7a74f57d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          address: {
+            streetAddress: "3570 S Las Vegas Blvd",
+            addressLocality: "Las Vegas",
+            addressRegion: "NV",
+            postalCode: "89109",
+            addressCountry: "US"
+          },
+          rating: 4.5,
+          ratingCount: 11876
+        },
+        {
+          name: "Wynn Las Vegas",
+          image: "https://images.unsplash.com/photo-1601042879364-f3947d3f9c16?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          address: {
+            streetAddress: "3131 S Las Vegas Blvd",
+            addressLocality: "Las Vegas",
+            addressRegion: "NV",
+            postalCode: "89109",
+            addressCountry: "US"
+          },
+          rating: 4.8,
+          ratingCount: 13542
+        },
+        {
+          name: "Atlantis Paradise Island",
+          image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          address: {
+            streetAddress: "1 Casino Drive",
+            addressLocality: "Paradise Island",
+            addressCountry: "BS"
+          },
+          rating: 4.6,
+          ratingCount: 9876
+        },
+        {
+          name: "Crown Melbourne",
+          image: "https://images.unsplash.com/photo-1575619063938-8ff5a35d9337?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          address: {
+            streetAddress: "8 Whiteman St",
+            addressLocality: "Southbank",
+            addressRegion: "VIC",
+            postalCode: "3006",
+            addressCountry: "AU"
+          },
+          rating: 4.5,
+          ratingCount: 8765
+        },
+        {
+          name: "MGM Grand",
+          image: "https://images.unsplash.com/photo-1581349485608-9469926a8e5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          address: {
+            streetAddress: "3799 S Las Vegas Blvd",
+            addressLocality: "Las Vegas",
+            addressRegion: "NV",
+            postalCode: "89109",
+            addressCountry: "US"
+          },
+          rating: 4.4,
+          ratingCount: 12345
+        },
+        {
+          name: "Sun City Resort",
+          image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          address: {
+            streetAddress: "R556",
+            addressLocality: "Rustenburg",
+            addressRegion: "North West",
+            postalCode: "0316",
+            addressCountry: "ZA"
+          },
+          rating: 4.7,
+          ratingCount: 7654
+        }
+      ];
+      
+      const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": siteName,
+        "description": document.querySelector('meta[name="description"]').content,
+        "url": window.location.href,
+        "mainEntity": {
+          "@type": "ItemList",
+          "itemListElement": casinoData.map((casino, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+              "@type": "LodgingBusiness",
+              "name": casino.name,
+              "image": casino.image,
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": casino.address.streetAddress,
+                "addressLocality": casino.address.addressLocality,
+                "addressRegion": casino.address.addressRegion || "",
+                "postalCode": casino.address.postalCode || "",
+                "addressCountry": casino.address.addressCountry
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": casino.rating,
+                "reviewCount": casino.ratingCount
+              }
+            }
+          }))
+        }
+      };
+      
+      // Add JSON-LD to the page
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.text = JSON.stringify(jsonLd);
+      document.head.appendChild(script);
+      
+      // ===== Section Definitions =====
+      // Core sections
+      const coreSections = [
+        {
+          id: 'header',
+          render: renderHeader
+        },
+        {
+          id: 'hero',
+          render: renderHero
+        },
+        {
+          id: 'top-casinos',
+          render: renderTopCasinos
+        },
+        {
+          id: 'features',
+          render: renderFeatures
+        },
+        {
+          id: 'gallery',
+          render: renderGallery
+        },
+        {
+          id: 'events',
+          render: renderEvents
+        },
+        {
+          id: 'vip-signup',
+          render: renderVIPSignup
+        },
+        {
+          id: 'testimonials',
+          render: renderTestimonials
+        },
+        {
+          id: 'map',
+          render: renderMap
+        },
+        {
+          id: 'faq',
+          render: renderFAQ
+        },
+        {
+          id: 'blog',
+          render: renderBlog
+        },
+        {
+          id: 'footer',
+          render: renderFooter
+        }
+      ];
+      
+      // Spotlight sections
+      const spotlightSections = [
+        {
+          id: 'casino-cuisine',
+          title: 'Casino Cuisine',
+          render: () => renderSpotlight('casino-cuisine', 'Casino Cuisine', 'Discover world-class dining experiences at top casino hotels', 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'exclusive-tournaments',
+          title: 'Exclusive Tournaments',
+          render: () => renderSpotlight('exclusive-tournaments', 'Exclusive Tournaments', 'High-stakes poker and blackjack tournaments for serious players', 'https://images.unsplash.com/photo-1529928520614-7c76e2d99740?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'high-stakes-tables',
+          title: 'High-Stakes Tables',
+          render: () => renderSpotlight('high-stakes-tables', 'High-Stakes Tables', 'Where fortunes are won and lost in the blink of an eye', 'https://images.unsplash.com/photo-1606167668584-78701c57f13d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'nightlife-hotspots',
+          title: 'Nightlife Hotspots',
+          render: () => renderSpotlight('nightlife-hotspots', 'Nightlife Hotspots', 'The most vibrant casino clubs and bars around the world', 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'themed-rooms',
+          title: 'Themed Rooms',
+          render: () => renderSpotlight('themed-rooms', 'Themed Rooms', 'Extraordinary themed accommodations at top casino hotels', 'https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'designer-boutiques',
+          title: 'Designer Boutiques',
+          render: () => renderSpotlight('designer-boutiques', 'Designer Boutiques', 'Exclusive shopping experiences within world-class casinos', 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'vip-lounges',
+          title: 'VIP Lounges',
+          render: () => renderSpotlight('vip-lounges', 'VIP Lounges', 'Exclusive retreats for high-rollers and casino elite', 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'slot-arcade',
+          title: 'Slot Arcade Highlights',
+          render: () => renderSpotlight('slot-arcade', 'Slot Arcade Highlights', 'The most innovative and rewarding slot machines in the world', 'https://images.unsplash.com/photo-1596838132731-31a4e5f9a4e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'live-jazz',
+          title: 'Live Jazz Nights',
+          render: () => renderSpotlight('live-jazz', 'Live Jazz Nights', 'Sophisticated entertainment at the world\'s finest casino lounges', 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'suites-tour',
+          title: 'Luxury Suites Tour',
+          render: () => renderSpotlight('suites-tour', 'Luxury Suites Tour', 'Inside the most opulent accommodations at top casino hotels', 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'celebrity-chefs',
+          title: 'Celebrity Chef Pop-Ups',
+          render: () => renderSpotlight('celebrity-chefs', 'Celebrity Chef Pop-Ups', 'Limited-time culinary events at premier casino destinations', 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'poolside-gaming',
+          title: 'Poolside Gaming',
+          render: () => renderSpotlight('poolside-gaming', 'Poolside Gaming', 'Unique gaming experiences in spectacular pool settings', 'https://images.unsplash.com/photo-1540541338287-41700207dee6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'seasonal-festivals',
+          title: 'Seasonal Festivals',
+          render: () => renderSpotlight('seasonal-festivals', 'Seasonal Festivals', 'Special casino events that celebrate holidays and seasons', 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'charity-events',
+          title: 'Charity Events',
+          render: () => renderSpotlight('charity-events', 'Charity Events', 'How top casinos give back through charitable gaming events', 'https://images.unsplash.com/photo-1559548331-f9cb98001426?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'cigar-bars',
+          title: 'Cigar Bars',
+          render: () => renderSpotlight('cigar-bars', 'Cigar Bars', 'Sophisticated lounges for cigar aficionados at premier casinos', 'https://images.unsplash.com/photo-1527871369852-eb58cb2b54e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'crypto-gaming',
+          title: 'Crypto Gaming',
+          render: () => renderSpotlight('crypto-gaming', 'Crypto Gaming', 'The future of casino gaming with cryptocurrency integration', 'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'retro-games',
+          title: 'Retro Game Nights',
+          render: () => renderSpotlight('retro-games', 'Retro Game Nights', 'Classic casino games that never go out of style', 'https://images.unsplash.com/photo-1595732301236-4a1b2657fa64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'art-installations',
+          title: 'Art Installations',
+          render: () => renderSpotlight('art-installations', 'Art Installations', 'Breathtaking art collections housed in the world\'s finest casinos', 'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'eco-gaming',
+          title: 'Eco-Gaming Initiatives',
+          render: () => renderSpotlight('eco-gaming', 'Eco-Gaming Initiatives', 'Sustainable practices at forward-thinking casino resorts', 'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        },
+        {
+          id: 'underwater-lounges',
+          title: 'Underwater Lounges',
+          render: () => renderSpotlight('underwater-lounges', 'Underwater Lounges', 'Submerged casino experiences that defy imagination', 'https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')
+        }
+      ];
+      
+      // ===== Randomize Sections =====
+      // Shuffle core sections
+      const shuffledCoreSections = [...coreSections].sort(() => Math.random() - 0.5);
+      
+      // Shuffle and select spotlight sections (randomly omit up to 2)
+      const numSpotlightsToShow = Math.floor(Math.random() * 3) + 18; // 18-20 sections
+      const shuffledSpotlightSections = [...spotlightSections].sort(() => Math.random() - 0.5).slice(0, numSpotlightsToShow);
+      
+      // Combine and shuffle all sections (except header and footer)
+      const headerSection = shuffledCoreSections.find(section => section.id === 'header');
+      const footerSection = shuffledCoreSections.find(section => section.id === 'footer');
+      const otherCoreSections = shuffledCoreSections.filter(section => section.id !== 'header' && section.id !== 'footer');
+      
+      // Combine all sections with header first and footer last
+      const allSections = [
+        headerSection,
+        ...otherCoreSections,
+        ...shuffledSpotlightSections,
+        footerSection
+      ];
+      
+      // Create navigation links based on sections
+      const navLinks = [...otherCoreSections, ...shuffledSpotlightSections]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, Math.floor(Math.random() * 4) + 5) // 5-8 random links
+        .map(section => ({
+          id: section.id,
+          title: section.title || section.id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+        }));
+      
+      // ===== Render Sections =====
+      const appContainer = document.getElementById('app');
+      
+      // Render all sections
+      allSections.forEach(section => {
+        const sectionElement = section.render();
+        if (sectionElement) {
+          appContainer.appendChild(sectionElement);
+        }
+      });
+      
+      // ===== Section Rendering Functions =====
+      function renderHeader() {
+        const header = document.createElement('header');
+        header.id = 'header';
+        header.className = 'fixed top-0 left-0 w-full bg-white shadow-md z-50 transition-all duration-300';
+        header.innerHTML = `
+          <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+              <a href="#" class="text-2xl font-bold text-primary">${siteName}</a>
+              
+              <!-- Desktop Navigation -->
+              <nav class="hidden md:block">
+                <ul class="flex space-x-6">
+                  ${navLinks.map(link => `
+                    <li><a href="#${link.id}" class="text-gray-700 hover:text-secondary transition-colors">${link.title}</a></li>
+                  `).join('')}
+                </ul>
+              </nav>
+              
+              <!-- Mobile Navigation Button -->
+              <button class="hamburger md:hidden flex flex-col justify-center items-center">
+                <div class="w-6 h-0.5 bg-gray-700 mb-1.5"></div>
+                <div class="w-6 h-0.5 bg-gray-700 mb-1.5"></div>
+                <div class="w-6 h-0.5 bg-gray-700"></div>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Mobile Menu -->
+          <div class="mobile-menu transform -translate-x-full fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 overflow-y-auto">
+            <div class="p-4">
+              <div class="flex justify-between items-center mb-8">
+                <span class="text-xl font-bold text-primary">${siteName}</span>
+                <button class="close-menu text-gray-500 hover:text-gray-700">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <nav>
+                <ul class="space-y-4">
+                  ${navLinks.map(link => `
+                    <li><a href="#${link.id}" class="block py-2 text-gray-700 hover:text-secondary transition-colors">${link.title}</a></li>
+                  `).join('')}
+                </ul>
+              </nav>
+            </div>
+          </div>
+        `;
+        
+        return header;
+      }
+      
+      function renderHero() {
+        // Generate a random future date in 2025 for the countdown
+        const futureDate = new Date();
+        futureDate.setFullYear(2025);
+        futureDate.setMonth(Math.floor(Math.random() * 12));
+        futureDate.setDate(Math.floor(Math.random() * 28) + 1);
+        
+        const heroImages = [
+          'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1605833556294-ea5c7a74f57d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1602002418816-5c0aeef426aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
+        ];
+        
+        const randomHeroImage = heroImages[Math.floor(Math.random() * heroImages.length)];
+        
+        const heroTitles = [
+          'Discover the World\'s Finest Casino Hotels',
+          'Experience Gaming Excellence Worldwide',
+          'Explore Iconic Casino Destinations',
+          'The Ultimate Casino Hotel Guide'
+        ];
+        
+        const randomHeroTitle = heroTitles[Math.floor(Math.random() * heroTitles.length)];
+        
+        const section = document.createElement('section');
+        section.id = 'hero';
+        section.className = 'relative min-h-screen flex items-center justify-center section-fade-in';
+        section.innerHTML = `
+          <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${randomHeroImage}');">
+            <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+          </div>
+          
+          <div class="container mx-auto px-4 relative z-10 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">${randomHeroTitle}</h1>
+            <p class="text-xl text-white mb-8 max-w-3xl mx-auto">Showcasing architectural marvels, gaming excellence, and world-class entertainment at the most renowned casino hotels across the globe.</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+              <a href="#top-casinos" class="bg-secondary hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105">
+                Explore Casinos
+              </a>
+              <a href="#vip-signup" class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-primary transition-all transform hover:scale-105">
+                Join VIP Club
+              </a>
+            </div>
+            
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-6 inline-block">
+              <p class="text-white mb-2">Next Major Casino Event</p>
+              <div class="countdown flex justify-center gap-4" data-date="${futureDate.toISOString()}">
+                <div class="text-center">
+                  <div class="text-3xl font-bold text-white days">00</div>
+                  <div class="text-sm text-white">Days</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-3xl font-bold text-white hours">00</div>
+                  <div class="text-sm text-white">Hours</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-3xl font-bold text-white minutes">00</div>
+                  <div class="text-sm text-white">Minutes</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-3xl font-bold text-white seconds">00</div>
+                  <div class="text-sm text-white">Seconds</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        return section;
+      }
+      
+      function renderTopCasinos() {
+        // Randomly select 6-10 casinos
+        const numCasinos = Math.floor(Math.random() * 5) + 6; // 6-10 casinos
+        const selectedCasinos = [...casinoData].sort(() => Math.random() - 0.5).slice(0, numCasinos);
+        
+        const section = document.createElement('section');
+        section.id = 'top-casinos';
+        section.className = 'py-20 bg-light section-fade-in';
+        section.innerHTML = `
+          <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Top Casino Hotels</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              ${selectedCasinos.map(casino => `
+                <div class="casino-card bg-white rounded-lg overflow-hidden shadow-lg">
+                  <img src="${casino.image}" alt="${casino.name}" class="w-full h-64 object-cover">
+                  <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                      <h3 class="text-xl font-bold">${casino.name}</h3>
+                      <div class="flex items-center">
+                        <span class="text-yellow-500 mr-1"><i class="fas fa-star"></i></span>
+                        <span>${casino.rating}</span>
+                      </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">${casino.address.addressLocality}, ${casino.address.addressCountry}</p>
+                    <p class="mb-4">A world-class destination featuring exceptional gaming floors, entertainment venues, and architectural brilliance.</p>
+                    <button class="view-casino bg-primary hover:bg-opacity-90 text-white py-2 px-4 rounded" data-casino="${casino.name}">
+                      Learn More
+                    </button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            
+            <div class="text-center mt-12">
+              <button id="load-more-casinos" class="bg-secondary hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105">
+                Load More
+              </button>
+            </div>
+          </div>
+        `;
+        
+        return section;
+      }
+      
+      function renderFeatures() {
+        const features = [
+          {
+            icon: 'fa-dice',
+            title: 'World-Class Gaming',
+            description: 'Experience the thrill of gaming at tables and machines that cater to both novices and high-rollers.'
+          },
+          {
+            icon: 'fa-utensils',
+            title: 'Fine Dining',
+            description: 'Savor exquisite cuisine prepared by renowned chefs at casino hotel restaurants.'
+          },
+          {
+            icon: 'fa-glass-martini-alt',
+            title: 'Signature Cocktails',
+            description: 'Enjoy handcrafted beverages at sophisticated bars and lounges within these premier establishments.'
+          },
+          {
+            icon: 'fa-music',
+            title: 'Live Entertainment',
+            description: 'Witness spectacular performances by world-famous artists in state-of-the-art venues.'
+          },
+          {
+            icon: 'fa-concierge-bell',
+            title: 'VIP Services',
+            description: 'Experience unparalleled personal attention with exclusive concierge and butler services.'
+          },
+          {
+            icon: 'fa-building',
+            title: 'Architectural Marvels',
+            description: 'Marvel at the stunning design and engineering feats that define these iconic structures.'
+          }
+        ];
+        
+        // Randomly select 4-6 features
+        const numFeatures = Math.floor(Math.random() * 3) + 4; // 4-6 features
+        const selectedFeatures = [...features].sort(() => Math.random() - 0.5).slice(0, numFeatures);
+        
+        const section = document.createElement('section');
+        section.id = 'features';
+        section.className = 'py-20 bg-gray-100 section-fade-in';
+        section.innerHTML = `
+          <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Exceptional Amenities</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              ${selectedFeatures.map(feature => `
+                <div class="feature-block bg-white rounded-lg p-6 shadow-lg">
+                  <div class="text-4xl text-secondary mb-4">
+                    <i class="fas ${feature.icon}"></i>
+                  </div>
+                  <h3 class="text-xl font-bold mb-2">${feature.title}</h3>
+                  <p class="text-gray-600 mb-4">${feature.description}</p>
+                  <button class="read-more-feature text-primary hover:text-secondary transition-colors">
+                    Read More <i class="fas fa-arrow-right ml-1"></i>
+                  </button>
+                  
+                  <div class="feature-details hidden mt-4 pt-4 border-t border-gray-200">
+                    <p>The world's premier casino hotels elevate ${feature.title.toLowerCase()} to an art form, creating unforgettable experiences for guests. From exclusive access to rare gaming opportunities to architectural wonders that defy imagination, these destinations represent the pinnacle of hospitality and entertainment.</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        
+        return section;
+      }
+      
+      function renderGallery() {
+        const galleryImages = [
+          {
+            url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            caption: 'Majestic casino entrance with fountains'
+          },
+          {
+            url: 'https://images.unsplash.com/photo-1605833556294-ea5c7a74f57d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            caption: 'Las Vegas Strip at night'
+          },
+          {
+            url: 'https://images.unsplash.com/photo-1602002418816-5c0aeef426aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            caption: 'Elegant casino interior'
+          },
+          {
+            url: 'https://images.unsplash.com/photo-1606167668584-78701c57f13d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            caption: 'High-stakes poker table'
+          },
+          {
+            url: 'https://images.unsplash.com/photo-1596838132731-31a4e5f9a4e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            caption: 'Vibrant slot machine hall'
+          },
+          {
+            url: 'https://images.unsplash.com/photo-1565967511849-76a60a516170?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            caption: 'Marina Bay Sands infinity pool'
+          },
+          {
+            url: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            caption: 'Tropical casino resort'
+          },
+          {
+            url: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            caption: 'Casino nightclub atmosphere'
+          }
+        ];
+        
+        // Randomly select 5-8 images
+        const numImages = Math.floor(Math.random() * 4) + 5; // 5-8 images
+        const selectedImages = [...galleryImages].sort(() => Math.random() - 0.5).slice(0, numImages);
+        
+        const section = document.createElement('section');
+        section.id = 'gallery';
+        section.className = 'py-20 bg-white section-fade-in';
+        section.innerHTML = `
+          <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Casino Gallery</h2>
+            
+            <div class="swiper gallery-swiper">
+              <div class="swiper-wrapper">
+                ${selectedImages.map(image => `
+                  <div class="swiper-slide">
+                    <div class="relative overflow-hidden rounded-lg">
+                      <img 
+                        src="${image.url}" 
+                        alt="${image.caption}" 
+                        class="w-full h-[500px] object-cover cursor-pointer gallery-image" 
+                        loading="lazy"
+                        data-src="${image.url}"
+                        data-caption="${image.caption}"
+                      >
+                      <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white p-4">
+                        <p>${image.caption}</p>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+              <div class="swiper-pagination"></div>
+              <div class="swiper-button-next"></div>
+              <div class="swiper-button-prev"></div>
+            </div>
+            
+            <div class="mt-6">
+              <div class="swiper gallery-thumbs">
+                <div class="swiper-wrapper">
+                  ${selectedImages.map(image => `
+                    <div class="swiper-slide">
+                      <img 
+                        src="${image.url}" 
+                        alt="Thumbnail" 
+                        class="w-full h-24 object-cover rounded cursor-pointer" 
+                        loading="lazy"
+                      >
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        return section;
+      }
+      
+      function renderEvents() {
+        // Generate random future dates in 2025
+        function generateRandomDate() {
+          const date = new Date();
+          date.setFullYear(2025);
+          date.setMonth(Math.floor(Math.random() * 12));
+          date.setDate(Math.floor(Math.random() * 28) + 1);
+          return date;
+        }
+        
+        const events = [
+          {
+            title: 'World Poker Championship',
+            description: 'The most prestigious poker tournament bringing together the world\'s elite players.',
+            date: generateRandomDate(),
+            image: 'https://images.unsplash.com/photo-1529928520614-7c76e2d99740?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            location: 'Bellagio, Las Vegas'
+          },
+          {
+            title: 'International Casino Expo',
+            description: 'Showcasing the latest innovations in gaming technology and casino management.',
+            date: generateRandomDate(),
+            image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            location: 'Marina Bay Sands, Singapore'
+          },
+          {
+            title: 'Casino Royale Gala',
+            description: 'An elegant black-tie event featuring gourmet dining and exclusive gaming tables.',
+            date: generateRandomDate(),
+            image: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            location: 'Casino de Monte-Carlo, Monaco'
+          },
+          {
+            title: 'High Roller Blackjack Tournament',
+            description: 'A high-stakes competition for serious blackjack players with substantial prizes.',
+            date: generateRandomDate(),
+            image: 'https://images.unsplash.com/photo-1606167668584-78701c57f13d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            location: 'The Venetian Macao, Macau'
+          },
+          {
+            title: 'Casino Architecture Awards',
+            description: 'Celebrating innovative design and engineering in casino resort construction.',
+            date: generateRandomDate(),
+            image: 'https://images.unsplash.com/photo-1602002418816-5c0aeef426aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            location: 'Caesars Palace, Las Vegas'
+          },
+          {
+            title: 'International Roulette Championship',
+            description: 'The world\'s premier roulette competition with participants from across the globe.',
+            date: generateRandomDate(),
+            image: 'https://images.unsplash.com/photo-1518641301065-02f6ef5c15f7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            location: 'Crown Melbourne, Australia'
+          }
+        ];
+        
+        // Randomly select 4-6 events
+        const numEvents = Math.floor(Math.random() * 3) + 4; // 4-6 events
+        const selectedEvents = [...events].sort(() => Math.random() - 0.5).slice(0, numEvents);
+        
+        const section = document.createElement('section');
+        section.id = 'events';
+        section.className = 'py-20 bg-gray-100 section-fade-in';
+        section.innerHTML = `
+          <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Upcoming Casino Events</h2>
+            
+            <div class="swiper events-swiper">
+              <div class="swiper-wrapper">
+                ${selectedEvents.map(event => {
+                  const eventDate = new Date(event.date);
+                  const formattedDate = eventDate.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  });
+                  
+                  return `
+                    <div class="swiper-slide">
+                      <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+                        <img src="${event.image}" alt="${event.title}" class="w-full h-64 object-cover">
+                        <div class="p-6">
+                          <h3 class="text-xl font-bold mb-2">${event.title}</h3>
+                          <p class="text-gray-600 mb-4">${event.description}</p>
+                          <div class="flex justify-between items-center mb-4">
+                            <div>
+                              <p class="text-gray-700"><i class="far fa-calendar-alt mr-2"></i>${formattedDate}</p>
+                              <p class="text-gray-700"><i class="fas fa-map-marker-alt mr-2"></i>${event.location}</p>
+                            </div>
+                            <div class="event-countdown" data-date="${event.date.toISOString()}">
+                              <span class="days">00</span>d
+                              <span class="hours">00</span>h
+                              <span class="minutes">00</span>m
+                            </div>
+                          </div>
+                          <button class="view-event bg-primary hover:bg-opacity-90 text-white py-2 px-4 rounded w-full" data-event="${event.title}">
+                            Learn More
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+              <div class="swiper-pagination"></div>
+              <div class="swiper-button-next"></div>
+              <div class="swiper-button-prev"></div>
+            </div>
+          </div>
+        `;
+        
+        return section;
+      }
+      
+      function renderVIPSignup() {
+        const section = document.createElement('section');
+        section.id = 'vip-signup';
+        section.className = 'py-20 bg-white section-fade-in';
+        section.innerHTML = `
+          <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center rounded-lg overflow-hidden shadow-xl">
+              <div class="w-full md:w-1/2">
+                <img src="https://images.unsplash.com/photo-1606167668584-78701c57f13d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="VIP Casino Experience" class="w-full h-full object-cover">
+              </div>
+              <div class="w-full md:w-1/2 bg-primary p-8 md:p-12">
+                <h2 class="text-3xl font-bold text-white mb-6">Join Our VIP Club</h2>
+                <p class="text-white mb-8">Get exclusive access to casino guides, event notifications, and expert insights about the world's finest casino hotels.</p>
+                
+                <form id="vip-form" class="space-y-4">
+                  <div>
+                    <label for="name" class="block text-white mb-2">Full Name</label>
+                    <input type="text" id="name" name="name" class="w-full px-4 py-2 rounded" required>
+                  </div>
+                  
+                  <div>
+                    <label for="email" class="block text-white mb-2">Email Address</label>
+                    <input type="email" id="email" name="email" class="w-full px-4 py-2 rounded" required>
+                  </div>
+                  
+                  <div>
+                    <label for="country" class="block text-white mb-2">Country</label>
+                    <select id="country" name="country" class="w-full px-4 py-2 rounded" required>
+                      <option value="">Select Country</option>
+                      <option value="US">United States</option>
+                      <option value="UK">United Kingdom</option>
+                      <option value="CA">Canada</option>
+                      <option value="AU">Australia</option>
+                      <option value="SG">Singapore</option>
+                      <option value="JP">Japan</option>
+                      <option value="FR">France</option>
+                      <option value="DE">Germany</option>
+                      <option value="IT">Italy</option>
+                      <option value="ES">Spain</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label for="favorite-casino" class="block text-white mb-2">Favorite Casino</label>
+                    <select id="favorite-casino" name="favorite-casino" class="w-full px-4 py-2 rounded" required>
+                      <option value="">Select Casino</option>
+                      ${casinoData.map(casino => `
+                        <option value="${casino.name}">${casino.name}</option>
+                      `).join('')}
+                    </select>
+                  </div>
+                  
+                  <div class="pt-4">
+                    <button type="submit" class="bg-secondary hover:bg-opacity-90 text-white font-bold py-3 px-6 rounded-lg transition-all transform hover:scale-105 w-full flex justify-center items-center">
+                      <span id="submit-text">Join VIP Club</span>
+                      <span id="submit-spinner" class="spinner ml-2 hidden"></span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        return section;
+      }
+      
+      function renderTestimonials() {
+        const testimonials = [
+          {
+            name: 'James Wilson',
+            role: 'Travel Blogger',
+            quote: 'This guide helped me discover some of the most extraordinary casino hotels I\'ve ever visited. The architectural details and gaming experiences were exactly as described.',
+            image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
+          },
+          {
+            name: 'Sophia Chen',
+            role: 'Casino Enthusiast',
+            quote: 'The detailed information about each casino\'s unique features helped me plan my global casino tour. I particularly appreciated the insights about table games and entertainment options.',
+            image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
+          },
+          {
+            name: 'Michael Rodriguez',
+            role: 'Architectural Photographer',
+            quote: 'As someone who photographs casino architecture, this resource has been invaluable. The selection of venues represents the perfect blend of classic and contemporary casino design.',
+            image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
+          },
+          {
+            name: 'Emily Johnson',
+            role: 'Hospitality Consultant',
+            quote: 'The comprehensive overview of amenities and services at these premier casino hotels provides an excellent benchmark for the industry. A must-read for hospitality professionals.',
+            image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
+          },
+          {
+            name: 'David Thompson',
+            role: 'Gaming Industry Analyst',
+            quote: 'This guide offers remarkable insights into what makes a casino hotel truly exceptional. The attention to detail regarding gaming options and architectural significance is impressive.',
+            image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
+          }
+        ];
+        
+        // Randomly select 3-5 testimonials
+        const numTestimonials = Math.floor(Math.random() * 3) + 3; // 3-5 testimonials
+        const selectedTestimonials = [...testimonials].sort(() => Math.random() - 0.5).slice(0, numTestimonials);
+        
+        const section = document.createElement('section');
+        section.id = 'testimonials';
+        section.className = 'py-20 bg-gray-100 section-fade-in';
+        section.innerHTML = `
+          <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">What People Say</h2>
+            
+            <div class="swiper testimonials-swiper">
+              <div class="swiper-wrapper">
+                ${selectedTestimonials.map(testimonial => `
+                  <div class="swiper-slide">
+                    <div class="bg-white rounded-lg p-8 shadow-lg">
+                      <div class="flex items-center mb-6">
+                        <img src="${testimonial.image}" alt="${testimonial.name}" class="w-16 h-16 rounded-full object-cover mr-4">
+                        <div>
+                          <h3 class="font-bold">${testimonial.name}</h3>
+                          <p class="text-gray-600">${testimonial.role}</p>
+                        </div>
+                      </div>
+                      <p class="text-gray-700 italic">"${testimonial.quote}"</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>
+        `;
+        
+        return section;
+      }
+      
+      function renderMap() {
+        const mapPins = [
+          { id: 'las-vegas', name: 'Las Vegas', country: 'USA', x: 20, y: 40, casinos: ['Bellagio', 'Caesars Palace', 'Wynn Las Vegas', 'MGM Grand'] },
+          { id: 'macau', name: 'Macau', country: 'China', x: 75, y: 45, casinos: ['The Venetian Macao', 'MGM Macau', 'Grand Lisboa'] },
+          { id: 'monaco', name: 'Monaco', country: 'Monaco', x: 48, y: 38, casinos: ['Casino de Monte-Carlo', 'Casino Café de Paris'] },
+          { id: 'singapore', name: 'Singapore', country: 'Singapore', x: 72, y: 55, casinos: ['Marina Bay Sands', 'Resorts World Sentosa'] },
+          { id: 'atlantic-city', name: 'Atlantic City', country: 'USA', x: 25, y: 38, casinos: ['Borgata', 'Hard Rock', 'Ocean Casino Resort'] },
+          { id: 'melbourne', name: 'Melbourne', country: 'Australia', x: 85, y: 75, casinos: ['Crown Melbourne', 'Treasury Casino'] },
+          { id: 'paradise-island', name: 'Paradise Island', country: 'Bahamas', x: 28, y: 45, casinos: ['Atlantis Paradise Island', 'Baha Mar'] },
+          { id: 'sun-city', name: 'Sun City', country: 'South Africa', x: 52, y: 65, casinos: ['Sun City Resort', 'The Palace of the Lost City'] },
+          { id: 'aruba', name: 'Aruba', country: 'Aruba', x: 30, y: 50, casinos: ['Stellaris Casino', 'Casino at the Ritz-Carlton'] },
+          { id: 'baden-baden', name: 'Baden-Baden', country: 'Germany', x: 50, y: 35, casinos: ['Casino Baden-Baden', 'Kurhaus Casino'] }
+        ];
+        
+        // Randomly select 6-10 pins
+        const numPins = Math.floor(Math.random() * 5) + 6; // 6-10 pins
+        const selectedPins = [...mapPins].sort(() => Math.random() - 0.5).slice(0, numPins);
+        
+        const section = document.createElement('section');
+        section.id = 'map';
+        section.className = 'py-20 bg-white section-fade-in';
+        section.innerHTML = `
+          <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Global Casino Destinations</h2>
+            
+            <div class="relative w-full h-[500px] bg-blue-50 rounded-lg overflow-hidden shadow-lg">
+              <!-- Simple SVG World Map -->
+              <svg viewBox="0 0 100 80" class="w-full h-full">
+                <!-- Simplified world map background -->
+                <path d="M0,0 L100,0 L100,80 L0,80 Z" fill="#e6f2ff" />
+                <path d="M10,20 Q30,10 50,20 T90,20 V60 Q70,70 50,60 T10,60 Z" fill="#cce5ff" />
+                
+                <!-- Map pins -->
+                ${selectedPins.map(pin => `
+                  <g class="map-pin" data-location="${pin.id}">
+                    <circle cx="${pin.x}" cy="${pin.y}" r="1.5" fill="#E74C3C" />
+                    <circle cx="${pin.x}" cy="${pin.y}" r="0.7" fill="#fff" />
+                    <text x="${pin.x + 2}" y="${pin.y}" font-size="2" fill="#2C3E50">${pin.name}</text>
+                  </g>
+                `).join('')}
+              </svg>
+            </div>
+            
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              ${selectedPins.map(pin => `
+                <div id="${pin.id}-info" class="location-info bg-gray-100 rounded-lg p-6">
+                  <h3 class="text-xl font-bold mb-2">${pin.name}, ${pin.country}</h3>
+                  <p class="mb-4">Home to some of the world's most renowned casino establishments.</p>
+                  <h4 class="font-bold mb-2">Notable Casinos:</h4>
+                  <ul class="list-disc pl-5 mb-4">
+                    ${pin.casinos.map(casino => `<li>${casino}</li>`).join('')}
+                  </ul>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        
+        return section;
+      }
+      
+      function renderFAQ() {
+        const faqs = [
+          {
+            question: 'What makes a casino hotel considered "world-class"?',
+            answer: 'World-class casino hotels are distinguished by their exceptional gaming facilities, architectural significance, range of entertainment options, quality of accommodations, dining excellence, and overall guest experience. These establishments often feature innovative design, cutting-edge technology, and extraordinary attention to detail.'
+          },
+          {
+            question: 'Which casino destination has the most diverse gaming options?',
+            answer: 'Macau is widely recognized for having the most diverse gaming options, offering everything from traditional Chinese games like Sic Bo and Fan-Tan to Western favorites such as blackjack, roulette, and baccarat. Las Vegas follows closely with an extensive variety of gaming experiences across its numerous casino resorts.'
+          },
+          {
+            question: 'Are casino hotels suitable for non-gamblers?',
+            answer: 'Absolutely. Modern casino hotels have evolved into comprehensive entertainment destinations that cater to diverse interests. They offer world-class restaurants, shopping arcades, live performances, art galleries, pools, and various recreational activities that appeal to non-gamblers as well.'
+          },
+          {
+            question: 'What is the largest casino hotel complex in the world?',
+            answer: 'The Venetian Macao is currently the largest casino hotel complex in the world, spanning approximately 10.5 million square feet. It features over 3,000 hotel rooms, 3,400 slot machines, 800 gaming tables, and a vast array of entertainment and dining options.'
+          },
+          {
+            question: 'Which casino destinations are known for their architectural significance?',
+            answer: 'Singapore\'s Marina Bay Sands is renowned for its iconic three-tower design topped by a spectacular SkyPark. Monte Carlo\'s Casino de Monaco exemplifies Belle Époque architecture. The Bellagio in Las Vegas is famous for its Italian-inspired design and fountain show. Macau\'s Grand Lisboa features a distinctive lotus-shaped structure.'
+          },
+          {
+            question: 'What types of entertainment can be found at premier casino hotels?',
+            answer: 'Premier casino hotels offer diverse entertainment options including world-class theatrical productions, concerts by renowned artists, comedy shows, cirque-style performances, nightclubs, lounges with live music, seasonal festivals, sporting events, and exclusive experiences tailored for high-end clientele.'
+          },
+          {
+            question: 'How do casino hotels differ around the world?',
+            answer: 'Casino hotels reflect their regional context in architecture, gaming preferences, and amenities. Asian casinos often emphasize baccarat and sic bo with feng shui-influenced design. European establishments tend to be more formal with a focus on table games in historic settings. American casinos typically offer diverse gaming in themed environments with extensive entertainment options.'
+          }
+        ];
+        
+        // Randomly select 5-7 FAQs
+        const numFaqs = Math.floor(Math.random() * 3) + 5; // 5-7 FAQs
+        const selectedFaqs = [...faqs].sort(() => Math.random() - 0.5).slice(0, numFaqs);
+        
+        const section = document.createElement('section');
+        section.id = 'faq';
+        section.className = 'py-20 bg-gray-100 section-fade-in';
+        section.innerHTML = `
+          <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+            
+            <div class="max-w-3xl mx-auto">
+              ${selectedFaqs.map((faq, index) => `
+                <div class="faq-item mb-4 border-b border-gray-200 pb-4">
+                  <button class="faq-question w-full text-left font-bold text-lg py-2 flex justify-between items-center" aria-expanded="false" aria-controls="faq-answer-${index}">
+                    ${faq.question}
+                    <i class="fas fa-chevron-down transition-transform"></i>
+                  </button>
+                  <div id="faq-answer-${index}" class="faq-answer hidden mt-2 text-gray-700">
+                    <p>${faq.answer}</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        
+        return section;
+      }
+      
+      function renderBlog() {
+        // Generate random dates in 2025
+        function generateRandomDate() {
+          const date = new Date();
+          date.setFullYear(2025);
+          date.setMonth(Math.floor(Math.random() * 12));
+          date.setDate(Math.floor(Math.random() * 28) + 1);
+          return date;
+        }
+        
+        const blogPosts = [
+          {
+            title: 'The Evolution of Casino Architecture: From Classic to Contemporary',
+            snippet: 'Explore how casino design has transformed over the decades, reflecting changing tastes, technological advancements, and cultural influences.',
+            image: 'https://images.unsplash.com/photo-1602002418816-5c0aeef426aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            date: generateRandomDate(),
+            content: 'Casino architecture has undergone a remarkable evolution from the ornate, European-inspired designs of early establishments to the bold, innovative structures of today. This transformation reflects broader shifts in architectural thinking, technological capabilities, and cultural expectations. Early casinos often emulated European elegance with neoclassical elements, intricate detailing, and formal spaces designed to evoke exclusivity. The mid-20th century saw the rise of modernist influences, with clean lines, functional layouts, and integration of new materials. Contemporary casino design embraces spectacular forms, immersive environments, and sustainable practices, creating landmarks that define city skylines and serve as destinations in themselves. This architectural journey reveals how casinos have continuously reinvented themselves to captivate visitors and create memorable experiences beyond gaming.'
+          },
+          {
+            title: 'Inside the World\'s Most Exclusive Casino VIP Programs',
+            snippet: 'A glimpse into the rarefied world of high-roller treatment, where personalized service and extraordinary perks define the experience.',
+            image: 'https://images.unsplash.com/photo-1606167668584-78701c57f13d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            date: generateRandomDate(),
+            content: 'The most exclusive casino VIP programs represent the pinnacle of personalized hospitality, offering experiences that go far beyond the gaming floor. These carefully curated programs cater to high-value players with services that anticipate every need and desires that clients might not even realize they have. From dedicated personal hosts available 24/7 to private gaming salons with flexible betting limits, these programs establish an environment of privilege and discretion. Transportation often includes private jet service, helicopter transfers, and luxury car fleets. Accommodations feature spectacular villas and penthouses with amenities like private pools, personal butlers, and custom-stocked bars. Dining experiences might include bespoke menus created by celebrity chefs, rare wine pairings, and tables at fully-booked restaurants. Beyond the casino, VIP members receive access to sold-out events, exclusive shopping experiences with top designers, and custom excursions. These programs represent the ultimate expression of casino hospitality, where exceptional service and attention to detail create unparalleled guest experiences.'
+          },
+          {
+            title: 'The Technological Revolution Transforming Casino Gaming',
+            snippet: 'How cutting-edge innovations are reshaping the casino experience, from AI-enhanced games to immersive environments.',
+            image: 'https://images.unsplash.com/photo-1596838132731-31a4e5f9a4e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            date: generateRandomDate(),
+            content: 'Technology is fundamentally transforming the casino gaming landscape, creating new experiences that blend traditional gambling with digital innovation. Advanced analytics and AI systems are personalizing the gaming experience, recommending games based on player preferences and optimizing floor layouts for maximum engagement. Biometric authentication is streamlining entry and payment processes while enhancing security. On the gaming floor, traditional table games are being augmented with digital elements that display odds, history, and interactive features without sacrificing the tactile experience of chips and cards. Slot machines have evolved into immersive entertainment centers with 4K displays, surround sound, and haptic feedback. Virtual and augmented reality technologies are creating entirely new categories of casino games that blend physical and digital worlds. Mobile integration allows guests to seamlessly transition between devices and physical games, check wait times, make reservations, or even continue playing certain games from anywhere on the property. These technological advancements are not replacing the fundamental appeal of casino gaming but enhancing it for a new generation of players who expect digital integration in all their experiences.'
+          },
+          {
+            title: 'Culinary Masterpieces: The World\'s Finest Casino Restaurants',
+            snippet: 'Discover how casino hotels have become unexpected epicenters of gastronomic excellence, attracting renowned chefs and discerning diners.',
+            image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            date: generateRandomDate(),
+            content: 'Casino hotels have evolved into unexpected culinary destinations, housing some of the world\'s most acclaimed restaurants and innovative dining concepts. This gastronomic revolution began when casino operators recognized that exceptional dining experiences could attract guests independently of gaming attractions. Today, the world\'s premier casino properties feature restaurants helmed by internationally celebrated chefs, offering everything from refined interpretations of regional cuisines to boundary-pushing molecular gastronomy. These establishments spare no expense in creating distinctive dining environments, from intimate chef\'s tables to spectacular venues with panoramic views. Wine programs feature rare vintages and expert sommeliers, while service standards rival those of traditional fine dining capitals. Beyond signature restaurants, casino properties curate diverse culinary portfolios that might include authentic ethnic eateries, casual bistros, and innovative food halls. Special events like chef collaborations, seasonal tasting menus, and culinary festivals further enhance their reputation as gastronomic destinations. This commitment to culinary excellence has transformed casino dining from an afterthought to a central attraction, drawing food enthusiasts who might never place a bet but will travel great distances for an exceptional meal.'
+          }
+        ];
+        
+        // Randomly select 3-4 blog posts
+        const numPosts = Math.floor(Math.random() * 2) + 3; // 3-4 posts
+        const selectedPosts = [...blogPosts].sort(() => Math.random() - 0.5).slice(0, numPosts);
+        
+        const section = document.createElement('section');
+        section.id = 'blog';
+        section.className = 'py-20 bg-white section-fade-in';
+        section.innerHTML = `
+          <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Casino Insights</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${numPosts} gap-8">
+              ${selectedPosts.map(post => {
+                const postDate = new Date(post.date);
+                const formattedDate = postDate.toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                });
+                
+                return `
+                  <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+                    <img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                      <p class="text-gray-500 mb-2">${formattedDate}</p>
+                      <h3 class="text-xl font-bold mb-2">${post.title}</h3>
+                      <p class="text-gray-700 mb-4">${post.snippet}</p>
+                      <button class="read-blog text-primary hover:text-secondary transition-colors" data-title="${post.title}" data-content="${post.content.replace(/"/g, '&quot;')}">
+                        Read More <i class="fas fa-arrow-right ml-1"></i>
+                      </button>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+        
+        return section;
+      }
+      
+      function renderFooter() {
+        const section = document.createElement('footer');
+        section.id = 'footer';
+        section.className = 'bg-primary text-white py-12';
+        section.innerHTML = `
+          <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div>
+                <h3 class="text-xl font-bold mb-4">${siteName}</h3>
+                <p class="mb-4">Your guide to the world's most exceptional casino hotels and gaming destinations.</p>
+                <div class="flex space-x-4">
+                  <a href="#" class="text-white hover:text-accent transition-colors">
+                    <i class="fab fa-facebook-f text-xl"></i>
+                  </a>
+                  <a href="#" class="text-white hover:text-accent transition-colors">
+                    <i class="fab fa-twitter text-xl"></i>
+                  </a>
+                  <a href="#" class="text-white hover:text-accent transition-colors">
+                    <i class="fab fa-instagram text-xl"></i>
+                  </a>
+                  <a href="#" class="text-white hover:text-accent transition-colors">
+                    <i class="fab fa-pinterest text-xl"></i>
+                  </a>
+                </div>
+              </div>
+              
+              <div>
+                <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                <ul class="space-y-2">
+                  ${navLinks.map(link => `
+                    <li><a href="#${link.id}" class="text-white hover:text-accent transition-colors">${link.title}</a></li>
+                  `).join('')}
+                </ul>
+              </div>
+              
+              <div>
+                <h3 class="text-xl font-bold mb-4">Newsletter</h3>
+                <p class="mb-4">Subscribe for updates on the world's finest casino destinations.</p>
+                <form id="newsletter-form" class="flex">
+                  <input type="email" placeholder="Your email address" class="px-4 py-2 rounded-l w-full" required>
+                  <button type="submit" class="bg-secondary hover:bg-opacity-90 text-white px-4 py-2 rounded-r flex items-center">
+                    <span>Subscribe</span>
+                    <span class="newsletter-spinner spinner ml-2 hidden"></span>
+                  </button>
+                </form>
+              </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+              <p>&copy; ${new Date().getFullYear()} ${siteName}. All rights reserved.</p>
+              <div class="flex space-x-4 mt-4 md:mt-0">
+                <a href="#" class="text-white hover:text-accent transition-colors">Terms</a>
+                <a href="#" class="text-white hover:text-accent transition-colors">Privacy</a>
+                <a href="#" class="text-white hover:text-accent transition-colors">Disclaimer</a>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        return section;
+      }
+      
+      function renderSpotlight(id, title, description, imageUrl) {
+        const section = document.createElement('section');
+        section.id = id;
+        section.className = 'py-20 bg-white section-fade-in';
+        section.innerHTML = `
+          <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+              <div class="w-full md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                <h2 class="text-3xl font-bold mb-4">${title}</h2>
+                <p class="text-gray-700 mb-6">${description}</p>
+                <p class="text-gray-700 mb-6">The world's premier casino hotels elevate every aspect of the guest experience, creating unforgettable moments and settings that defy ordinary expectations. From architectural marvels to culinary excellence, these destinations represent the pinnacle of hospitality and entertainment.</p>
+                <button class="bg-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-lg transition-all transform hover:scale-105">
+                  Discover More
+                </button>
+              </div>
+              <div class="w-full md:w-1/2">
+                <img src="${imageUrl}" alt="${title}" class="rounded-lg shadow-lg w-full h-auto">
+              </div>
+            </div>
+          </div>
+        `;
+        
+        return section;
+      }
+      
+      // ===== Initialize Interactive Elements =====
+      // Initialize after a short delay to ensure DOM is fully rendered
+      setTimeout(() => {
+        // Initialize Swiper sliders
+        if (document.querySelector('.gallery-swiper')) {
+          const galleryThumbs = new Swiper('.gallery-thumbs', {
+            spaceBetween: 10,
+            slidesPerView: 4,
+            freeMode: true,
+            watchSlidesProgress: true
+          });
+          
+          const gallerySwiper = new Swiper('.gallery-swiper', {
+            spaceBetween: 10,
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+              el: '.swiper-pagination',
+              clickable: true
+            },
+            thumbs: {
+              swiper: galleryThumbs
+            }
+          });
+        }
+        
+        if (document.querySelector('.events-swiper')) {
+          const eventsSwiper = new Swiper('.events-swiper', {
+            spaceBetween: 30,
+            slidesPerView: 1,
+            pagination: {
+              el: '.swiper-pagination',
+              clickable: true
+            },
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+              640: {
+                slidesPerView: 2
+              },
+              1024: {
+                slidesPerView: 3
+              }
+            }
+          });
+        }
+        
+        if (document.querySelector('.testimonials-swiper')) {
+          const testimonialsSwiper = new Swiper('.testimonials-swiper', {
+            spaceBetween: 30,
+            slidesPerView: 1,
+            autoplay: {
+              delay: 5000,
+              disableOnInteraction: false
+            },
+            pagination: {
+              el: '.swiper-pagination',
+              clickable: true
+            },
+            breakpoints: {
+              768: {
+                slidesPerView: 2
+              },
+              1024: {
+                slidesPerView: 3
+              }
+            }
+          });
+        }
+        
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const closeMenu = document.querySelector('.close-menu');
+        
+        if (hamburger && mobileMenu) {
+          hamburger.addEventListener('click', () => {
+            hamburger.classList.add('active');
+            mobileMenu.style.transform = 'translateX(0)';
+          });
+          
+          closeMenu.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            mobileMenu.style.transform = 'translateX(-100%)';
+          });
+          
+          // Close mobile menu when clicking on a link
+          const mobileLinks = mobileMenu.querySelectorAll('a');
+          mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+              hamburger.classList.remove('active');
+              mobileMenu.style.transform = 'translateX(-100%)';
+            });
+          });
+        }
+        
+        // Scroll animations
+        const sections = document.querySelectorAll('.section-fade-in');
+        const observerOptions = {
+          root: null,
+          rootMargin: '0px',
+          threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+        
+        sections.forEach(section => {
+          observer.observe(section);
+        });
+        
+        // Sticky header
+        const header = document.getElementById('header');
+        let lastScrollTop = 0;
+        
+        window.addEventListener('scroll', () => {
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          
+          if (scrollTop > 100) {
+            header.classList.add('py-2');
+            header.classList.remove('py-4');
+            
+            if (scrollTop > lastScrollTop) {
+              // Scrolling down
+              header.style.transform = 'translateY(-100%)';
+            } else {
+              // Scrolling up
+              header.style.transform = 'translateY(0)';
+            }
+          } else {
+            header.classList.remove('py-2');
+            header.classList.add('py-4');
+            header.style.transform = 'translateY(0)';
+          }
+          
+          lastScrollTop = scrollTop;
+        });
+        
+        // Countdown timer
+        const countdowns = document.querySelectorAll('.countdown');
+        
+        function updateCountdown() {
+          countdowns.forEach(countdown => {
+            const targetDate = new Date(countdown.dataset.date);
+            const now = new Date();
+            const difference = targetDate - now;
+            
+            if (difference > 0) {
+              const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+              const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+              const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+              
+              countdown.querySelector('.days').textContent = days.toString().padStart(2, '0');
+              countdown.querySelector('.hours').textContent = hours.toString().padStart(2, '0');
+              countdown.querySelector('.minutes').textContent = minutes.toString().padStart(2, '0');
+              countdown.querySelector('.seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+          });
+        }
+        
+        // Event countdowns
+        const eventCountdowns = document.querySelectorAll('.event-countdown');
+        
+        function updateEventCountdowns() {
+          eventCountdowns.forEach(countdown => {
+            const targetDate = new Date(countdown.dataset.date);
+            const now = new Date();
+            const difference = targetDate - now;
+            
+            if (difference > 0) {
+              const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+              const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+              
+              countdown.querySelector('.days').textContent = days.toString().padStart(2, '0');
+              countdown.querySelector('.hours').textContent = hours.toString().padStart(2, '0');
+              countdown.querySelector('.minutes').textContent = minutes.toString().padStart(2, '0');
+            }
+          });
+        }
+        
+        // Initialize and update countdowns
+        updateCountdown();
+        updateEventCountdowns();
+        setInterval(updateCountdown, 1000);
+        setInterval(updateEventCountdowns, 60000);
+        
+        // Casino modal
+        const casinoModal = document.getElementById('casino-modal');
+        const casinoButtons = document.querySelectorAll('.view-casino');
+        const closeModalButtons = document.querySelectorAll('.close-modal');
+        
+        casinoButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const casinoName = button.dataset.casino;
+            const casino = casinoData.find(c => c.name === casinoName);
+            
+            if (casino) {
+              document.getElementById('modal-title').textContent = casino.name;
+              document.getElementById('modal-content').innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <img src="${casino.image}" alt="${casino.name}" class="w-full h-auto rounded-lg">
+                  </div>
+                  <div>
+                    <p class="mb-4"><strong>Location:</strong> ${casino.address.addressLocality}, ${casino.address.addressCountry}</p>
+                    <p class="mb-4"><strong>Rating:</strong> ${casino.rating}/5 (${casino.ratingCount.toLocaleString()} reviews)</p>
+                    <p class="mb-4"><strong>Features:</strong></p>
+                    <ul class="list-disc pl-5 mb-4">
+                      <li>World-class gaming floor</li>
+                      <li>Multiple dining options</li>
+                      <li>Live entertainment venues</li>
+                      <li>Exceptional architecture</li>
+                      <li>Premium accommodations</li>
+                    </ul>
+                    <p>This iconic destination offers visitors an unparalleled experience combining gaming excellence, architectural brilliance, and world-class entertainment.</p>
+                  </div>
+                </div>
+              `;
+              
+              casinoModal.classList.remove('hidden');
+            }
+          });
+        });
+        
+        closeModalButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            casinoModal.classList.add('hidden');
+          });
+        });
+        
+        // Close modal when clicking outside
+        casinoModal.addEventListener('click', (e) => {
+          if (e.target === casinoModal) {
+            casinoModal.classList.add('hidden');
+          }
+        });
+        
+        // Feature read more toggle
+        const readMoreButtons = document.querySelectorAll('.read-more-feature');
+        
+        readMoreButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const featureBlock = button.closest('.feature-block');
+            const featureDetails = featureBlock.querySelector('.feature-details');
+            
+            if (featureDetails.classList.contains('hidden')) {
+              featureDetails.classList.remove('hidden');
+              button.innerHTML = 'Read Less <i class="fas fa-arrow-up ml-1"></i>';
+            } else {
+              featureDetails.classList.add('hidden');
+              button.innerHTML = 'Read More <i class="fas fa-arrow-right ml-1"></i>';
+            }
+          });
+        });
+        
+        // FAQ accordion
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        
+        faqQuestions.forEach(question => {
+          question.addEventListener('click', () => {
+            const answer = question.nextElementSibling;
+            const icon = question.querySelector('i');
+            
+            // Toggle current FAQ
+            answer.classList.toggle('hidden');
+            icon.style.transform = answer.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+            
+            // Update ARIA attributes
+            const expanded = answer.classList.contains('hidden') ? 'false' : 'true';
+            question.setAttribute('aria-expanded', expanded);
+          });
+        });
+        
+        // Blog read more
+        const readBlogButtons = document.querySelectorAll('.read-blog');
+        
+        readBlogButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const title = button.dataset.title;
+            const content = button.dataset.content;
+            
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-content').innerHTML = `
+              <div class="prose max-w-none">
+                <p>${content}</p>
+              </div>
+            `;
+            
+            casinoModal.classList.remove('hidden');
+          });
+        });
+        
+        // VIP form submission
+        const vipForm = document.getElementById('vip-form');
+        
+        if (vipForm) {
+          vipForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const submitText = document.getElementById('submit-text');
+            const submitSpinner = document.getElementById('submit-spinner');
+            
+            // Show spinner
+            submitText.textContent = 'Processing...';
+            submitSpinner.classList.remove('hidden');
+            
+            // Simulate form submission
+            setTimeout(() => {
+              // Hide spinner
+              submitText.textContent = 'Join VIP Club';
+              submitSpinner.classList.add('hidden');
+              
+              // Show success message
+              showToast('Thank you for joining our VIP Club!');
+              
+              // Reset form
+              vipForm.reset();
+            }, 1500);
+          });
+        }
+        
+        // Newsletter form submission
+        const newsletterForm = document.getElementById('newsletter-form');
+        
+        if (newsletterForm) {
+          newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const spinner = newsletterForm.querySelector('.newsletter-spinner');
+            
+            // Show spinner
+            spinner.classList.remove('hidden');
+            
+            // Simulate form submission
+            setTimeout(() => {
+              // Hide spinner
+              spinner.classList.add('hidden');
+              
+              // Show success message
+              showToast('Thank you for subscribing to our newsletter!');
+              
+              // Reset form
+              newsletterForm.reset();
+            }, 1500);
+          });
+        }
+        
+        // Load more casinos button
+        const loadMoreButton = document.getElementById('load-more-casinos');
+        
+        if (loadMoreButton) {
+          loadMoreButton.addEventListener('click', () => {
+            // Show spinner
+            loadMoreButton.innerHTML = '<span class="spinner mr-2"></span> Loading...';
+            
+            // Simulate loading
+            setTimeout(() => {
+              // Hide button
+              loadMoreButton.style.display = 'none';
+              
+              // Show message
+              showToast('All casinos have been loaded');
+            }, 1500);
+          });
+        }
+        
+        // View event buttons
+        const eventButtons = document.querySelectorAll('.view-event');
+        
+        eventButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const eventName = button.dataset.event;
+            
+            document.getElementById('modal-title').textContent = eventName;
+            document.getElementById('modal-content').innerHTML = `
+              <div class="prose max-w-none">
+                <p>Join us for this exclusive casino event featuring world-class entertainment, gaming competitions, and networking opportunities with industry leaders.</p>
+                <p class="mt-4">Event highlights include:</p>
+                <ul class="mt-2">
+                  <li>VIP gaming tournaments with substantial prizes</li>
+                  <li>Networking receptions with industry executives</li>
+                  <li>Showcase of innovative casino technologies</li>
+                  <li>Special performances by renowned entertainers</li>
+                  <li>Exclusive access to new game releases</li>
+                </ul>
+                <p class="mt-4">Registration details will be announced soon. Join our VIP Club to receive priority access.</p>
+              </div>
+            `;
+            
+            casinoModal.classList.remove('hidden');
+          });
+        });
+        
+        // Map pins
+        const mapPins = document.querySelectorAll('.map-pin');
+        
+        mapPins.forEach(pin => {
+          pin.addEventListener('click', () => {
+            const locationId = pin.dataset.location;
+            const locationInfo = document.getElementById(`${locationId}-info`);
+            
+            if (locationInfo) {
+              locationInfo.scrollIntoView({ behavior: 'smooth' });
+              
+              // Highlight the location info
+              locationInfo.classList.add('bg-yellow-50');
+              setTimeout(() => {
+                locationInfo.classList.remove('bg-yellow-50');
+              }, 2000);
+            }
+          });
+        });
+        
+        // Gallery lightbox
+        const galleryImages = document.querySelectorAll('.gallery-image');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const closeLightbox = document.getElementById('close-lightbox');
+        
+        galleryImages.forEach(image => {
+          image.addEventListener('click', () => {
+            lightboxImg.src = image.dataset.src;
+            lightboxImg.alt = image.dataset.caption;
+            lightbox.classList.add('active');
+          });
+        });
+        
+        closeLightbox.addEventListener('click', () => {
+          lightbox.classList.remove('active');
+        });
+        
+        lightbox.addEventListener('click', (e) => {
+          if (e.target === lightbox) {
+            lightbox.classList.remove('active');
+          }
+        });
+        
+        // Toast notification function
+        function showToast(message) {
+          const toast = document.getElementById('toast');
+          const toastMessage = document.getElementById('toast-message');
+          
+          toastMessage.textContent = message;
+          toast.classList.add('show');
+          
+          setTimeout(() => {
+            toast.classList.remove('show');
+          }, 3000);
+        }
+        
+        // Escape key closes modals and lightbox
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            casinoModal.classList.add('hidden');
+            lightbox.classList.remove('active');
+          }
+        });
+      }, 500);
+    });
+  </script>
+</body>
+</html>
